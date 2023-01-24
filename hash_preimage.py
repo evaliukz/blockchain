@@ -10,14 +10,14 @@ def hash_preimage(target_string):
         return
     nonce = b'\x00'
    
-    k = len(target_string)
+    l = len(target_string)
     nonce = random.choice(string.ascii_letters) 
     nonce_sha = hashlib.sha256(nonce.encode('utf-8')) #convert to byte and get sha
-    nonce_sha_binary = bin(int(nonce_sha.hexdigest(), base=16))[-k:] #to binary
+    nonce_sha_binary = bin(int(nonce_sha.hexdigest(), base=16))[-l:] #to binary
 
     while nonce_sha_binary != target_string: #compare the random to target string
         nonce += random.choice(string.ascii_letters)
         nonce_sha = hashlib.sha256(nonce.encode('utf-8'))  #convert to byte and get sha
-        nonce_sha_binary = bin(int(nonce_sha.hexdigest(), base=16))[-k:]  #to binary
+        nonce_sha_binary = bin(int(nonce_sha.hexdigest(), base=16))[-l:]  #to binary
 
     return nonce
