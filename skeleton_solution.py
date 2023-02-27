@@ -16,7 +16,7 @@ print(rpc_connection.getblock(first_block_hash))
 # batch support : print timestamps of blocks 0 to 99
 # run in 2 RPC round-trips
 # example: https://github.com/jgarzik/python-bitcoinrpc
-commands = [ [ "getblockhash", height] for height in range(100) ]
+commands = [ [ "getblockhash", height] for height in range(1000) ]
 block_hashes = rpc_connection.batch_(commands)
 blocks = rpc_connection.batch_([ [ "getblock", h ] for h in block_hashes ])
 block_times = [ block["time"] for block in blocks ]
