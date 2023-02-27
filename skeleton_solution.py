@@ -5,7 +5,7 @@ from datetime import datetime
 rpcuser='quaker_quorum'
 rpcpassword='franklin_fought_for_continental_cash'
 rpcport=8332
-rpcip='3.134.159.30'
+rpcip='3.138.85.216'
 
 rpc_connection = AuthServiceProxy("http://%s:%s@%s:%s"%(rpcuser, rpcpassword, rpcip, rpcport))
 
