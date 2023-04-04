@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 from algosdk.v2client import algod
-from algosdk import mnemonic
+from algosdk import mnemonic, encoding
 from algosdk import transaction
+from algosdk import account
 
 #Connect to Algorand node maintained by PureStake
 algod_address = "https://testnet-algorand.api.purestake.io/ps2"
@@ -12,16 +13,24 @@ headers = {
    "X-API-Key": algod_token,
 }
 
-# convert passphrase to secret key
-#mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
-#sk = mnemonic.to_private_key(mnemonic_secret)
-#sender_pk = mnemonic.to_public_key(mnemonic_secret)
-sk = 'iaRPryNW7lzxjJxbBKfyY0QmhlheQypiIvI9yFxqWZANB1HngqQiOUoAqm2tle96Kf7MvIXtbQBwZr8Bej3MqQ=='
-sender_pk = 'BUDVDZ4CUQRDSSQAVJW23FPPPIU75TF4QXWW2ADQM27QC6R5ZSUU4OW3K4'
-
 
 acl = algod.AlgodClient(algod_token, algod_address, headers)
 min_balance = 100000 #https://developer.algorand.org/docs/features/accounts/#minimum-balance
+
+
+#secret_key, address = account.generate_account()
+mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
+sk = mnemonic.to_private_key(mnemonic_secret)
+sender_pk = mnemonic.to_public_key(mnemonic_secret)
+
+#print("Private key:", sk)
+#print("Address:", sender_pk)
+
+# check the address
+if encoding.is_valid_address(sender_pk):
+    print("valid!")
+else:
+    print("invalid.")
 
 def send_tokens( receiver_pk, tx_amount ):
     params = acl.suggested_params()
