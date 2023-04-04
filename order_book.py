@@ -25,9 +25,9 @@ def process_order(order):
     orders = session.query(Order).filter(Order.filled == None).all()
     for existing_order in orders:
         if ((existing_order.buy_currency != new_order.sell_currency)
-            and (existing_order.sell_currency != new_order.buy_currency)
-            and (existing_order.sell_amount / existing_order.buy_amount < new_order.buy_amount / new_order.sell_amount)
-            and (existing_order.counterparty_id != None)):
+            or (existing_order.sell_currency != new_order.buy_currency)
+            or (existing_order.sell_amount / existing_order.buy_amount < new_order.buy_amount / new_order.sell_amount)
+            or (existing_order.counterparty_id != None)):
             continue
    
         match_order = existing_order
