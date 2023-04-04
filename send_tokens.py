@@ -23,6 +23,12 @@ def send_tokens( receiver_pk, tx_amount ):
     last_valid_round = params.last
 
     #Your code here
+
+    # convert passphrase to secret key
+    mnemonic_secret = "I am a kitten but sometimes can be a cat"
+    sk = mnemonic.to_private_key(mnemonic_secret)
+    pk = mnemonic.to_public_key(mnemonic_secret)
+
     #create transaction
     txn = transaction.PaymentTxn(pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount, flat_fee=True)
 
