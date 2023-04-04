@@ -30,13 +30,11 @@ def send_tokens( receiver_pk, tx_amount ):
     sender_pk = mnemonic.to_public_key(mnemonic_secret)
 
     #create transaction
-    txn = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount)
-
-    # sign
-    signed_tx = txn.sign(sk)
-
-    # send
-    txid = txn.get_txid()
+    tx = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount)
+    #sign
+    signed_tx = tx.sign(sk)
+    txid = tx.get_txid()
+    #send
     acl.send_transaction(signed_tx)
 
     return sender_pk, txid
