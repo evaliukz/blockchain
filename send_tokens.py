@@ -25,7 +25,7 @@ def send_tokens( receiver_pk, tx_amount ):
     #Your code here
 
     # convert passphrase to secret key
-    mnemonic_secret = "wait morning kitten but sometimes can be cat cat amazing they are cool and cute abstract thoughts make sense sometimes weather ability working not fun"
+    mnemonic_secret = "wait morning kitten dog sometimes wind storm cat cat amazing they utility school campus cute abstract thought sense sometimes weather ability working quite fun health"
     sk = mnemonic.to_private_key(mnemonic_secret)
     sender_pk = mnemonic.to_public_key(mnemonic_secret)
 
