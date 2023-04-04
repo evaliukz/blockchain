@@ -13,9 +13,11 @@ headers = {
 }
 
 # convert passphrase to secret key
-mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
-sk = mnemonic.to_private_key(mnemonic_secret)
-sender_pk = mnemonic.to_public_key(mnemonic_secret)
+#mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
+#sk = mnemonic.to_private_key(mnemonic_secret)
+#sender_pk = mnemonic.to_public_key(mnemonic_secret)
+sk = 'iaRPryNW7lzxjJxbBKfyY0QmhlheQypiIvI9yFxqWZANB1HngqQiOUoAqm2tle96Kf7MvIXtbQBwZr8Bej3MqQ=='
+sender_pk = 'BUDVDZ4CUQRDSSQAVJW23FPPPIU75TF4QXWW2ADQM27QC6R5ZSUU4OW3K4'
 
 
 acl = algod.AlgodClient(algod_token, algod_address, headers)
