@@ -30,13 +30,12 @@ def send_tokens( receiver_pk, tx_amount ):
 
     #Your code here
     #create transaction
-    tx = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount)
+    tx = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount, flat_fee=True)
     #sign
     signed_tx = tx.sign(sk)
-    txid = tx.get_txid()
     #send
-    acl.send_transaction(signed_tx)
-
+    txid = acl.send_transaction(signed_tx)
+    wait_for_confirmation(acl, txid)
     return sender_pk, txid
 
 # Function from Algorand Inc.
