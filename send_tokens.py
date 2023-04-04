@@ -18,7 +18,7 @@ acl = algod.AlgodClient(algod_token, algod_address, headers)
 min_balance = 100000 #https://developer.algorand.org/docs/features/accounts/#minimum-balance
 
 
-#secret_key, address = account.generate_account()
+secret_key, address = account.generate_account()
 mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
 sk = mnemonic.to_private_key(mnemonic_secret)
 sender_pk = mnemonic.to_public_key(mnemonic_secret)
