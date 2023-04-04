@@ -27,17 +27,17 @@ def send_tokens( receiver_pk, tx_amount ):
     # convert passphrase to secret key
     mnemonic_secret = "I am a kitten but sometimes can be a cat"
     sk = mnemonic.to_private_key(mnemonic_secret)
-    pk = mnemonic.to_public_key(mnemonic_secret)
+    sender_pk = mnemonic.to_public_key(mnemonic_secret)
 
     #create transaction
-    txn = transaction.PaymentTxn(pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount, flat_fee=True)
+    txn = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount, flat_fee=True)
 
     # sign
-    stx = txn.sign(sk)
+    signed_tx = txn.sign(sk)
 
     # send
-    txid = acl.send_transaction(stx)
-    sender_pk = pk
+    txid = acl.send_transaction(signed_tx)
+    wait_for_confirmation(acl, txid)
 
     return sender_pk, txid
 
