@@ -36,9 +36,8 @@ def send_tokens( receiver_pk, tx_amount ):
     signed_tx = txn.sign(sk)
 
     # send
-    txid = acl.send_transaction(signed_tx)
-    
-    print("txid is ", txid)
+    txid = txn.get_txid()
+    acl.send_transaction(signed_tx)
 
     return sender_pk, txid
 
