@@ -19,19 +19,18 @@ min_balance = 100000 #https://developer.algorand.org/docs/features/accounts/#min
 
 
 # generate an account
-private_key, address = account.generate_account()
-print(f"address: {address}")
-print(f"private key: {private_key}")
-print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
+#private_key, address = account.generate_account()
+#print(f"address: {address}")
+#print(f"private key: {private_key}")
+#print(f"mnemonic: {mnemonic.from_private_key(private_key)}")
 
 # check if the address is valid
-if encoding.is_valid_address(address):
-    print("The address is valid!")
-else:
-    print("The address is invalid.")
+#if encoding.is_valid_address(address):
+#    print("The address is valid!")
+#else:
+#    print("The address is invalid.")
 
-secret_key, address = account.generate_account()
-mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
+mnemonic_secret = "flip funny month typical tilt electric luxury topic upper laugh wrist puppy service idea private shift reject neither minor unfair empower spawn small abstract audit"
 sk = mnemonic.to_private_key(mnemonic_secret)
 sender_pk = mnemonic.to_public_key(mnemonic_secret)
 
