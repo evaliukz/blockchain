@@ -12,6 +12,12 @@ headers = {
    "X-API-Key": algod_token,
 }
 
+# convert passphrase to secret key
+mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
+sk = mnemonic.to_private_key(mnemonic_secret)
+sender_pk = mnemonic.to_public_key(mnemonic_secret)
+
+
 acl = algod.AlgodClient(algod_token, algod_address, headers)
 min_balance = 100000 #https://developer.algorand.org/docs/features/accounts/#minimum-balance
 
@@ -23,12 +29,6 @@ def send_tokens( receiver_pk, tx_amount ):
     last_valid_round = params.last
 
     #Your code here
-
-    # convert passphrase to secret key
-    mnemonic_secret = "wait morning kitten dog horse pizza uncover fun kitten duty culture leader dress utility school kitten marble kangaroo fruit weather ability school apple fun health"
-    sk = mnemonic.to_private_key(mnemonic_secret)
-    sender_pk = mnemonic.to_public_key(mnemonic_secret)
-
     #create transaction
     tx = transaction.PaymentTxn(sender_pk, tx_fee, first_valid_round, last_valid_round, gen_hash, receiver_pk, tx_amount)
     #sign
