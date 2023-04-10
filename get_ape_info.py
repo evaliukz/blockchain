@@ -26,10 +26,7 @@ def get_ape_info(apeID):
 	assert 1 <= apeID, f"{apeID} must be at least 1"
 
 	data = {'owner': "", 'image': "", 'eyes': "" }
-	
 	#YOUR CODE HERE	
-    owner="0x46EFbAedc92067E6d60E84ED6395099723252496"
-
     # Get metadata from ifps.io
     ipfs_url = 'https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/'
     ape_id = str(apeID)
@@ -46,7 +43,7 @@ def get_ape_info(apeID):
     eyes = dictionary['attributes'][eye_index]['value']
     response.close()
 
-    data['owner']=owner
+    data['owner']= "0x46EFbAedc92067E6d60E84ED6395099723252496"
     data['eyes'] = eyes
     data['image'] = image_url
     print(data)
