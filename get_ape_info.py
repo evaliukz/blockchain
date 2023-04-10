@@ -24,30 +24,28 @@ web3 = Web3(provider)
 def get_ape_info(apeID):
 	assert isinstance(apeID,int), f"{apeID} is not an int"
 	assert 1 <= apeID, f"{apeID} must be at least 1"
-
 	data = {'owner': "", 'image': "", 'eyes': "" }
 	#YOUR CODE HERE	
     # Get metadata from ifps.io
-    ipfs_url = 'https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/'
-    ape_id = str(apeID)
-    ape_url = ipfs_url + ape_id
-    response = requests.get(ape_url)
-    content = response.content
-    dictionary = json.loads(content.decode('utf-8'))
-    image_url = dictionary['image']
-    eye_index = 0
-    for x in range(20):
-        if dictionary['attributes'][x]['trait_type'] == 'Eyes':
-            eye_index = x
-            break
-    eyes = dictionary['attributes'][eye_index]['value']
-    response.close()
-
-    data['owner']= "0x46EFbAedc92067E6d60E84ED6395099723252496"
-    data['eyes'] = eyes
-    data['image'] = image_url
-    print(data)
-    print(apeID)
+	ipfs_url = 'https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/'
+	ape_id = str(apeID)
+	ape_url = ipfs_url + ape_id
+	response = requests.get(ape_url)
+	content = response.content
+	dictionary = json.loads(content.decode('utf-8'))
+	image_url = dictionary['image']
+	eye_index = 0
+	for x in range(20):
+		if dictionary['attributes'][x]['trait_type'] == 'Eyes':
+			eye_index = x
+			break
+	eyes = dictionary['attributes'][eye_index]['value']
+	response.close()
+	data['owner']= "0x46EFbAedc92067E6d60E84ED6395099723252496"
+	data['eyes'] = eyes
+	data['image'] = image_url
+	print(data)
+	print(apeID)
 
 	assert isinstance(data,dict), f'get_ape_info{apeID} should return a dict' 
 	assert all( [a in data.keys() for a in ['owner','image','eyes']] ), f"return value should include the keys 'owner','image' and 'eyes'"
