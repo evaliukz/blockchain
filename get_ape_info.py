@@ -17,7 +17,7 @@ with open('/home/codio/workspace/abi.json', 'r') as f:
 
 ############################
 #Connect to an Ethereum node
-api_url = "https://cosmopolitan-holy-bridge.ethereum-sepolia.discover.quiknode.pro/ca045f298289774272dc5cb5853980e09266521e/"
+api_url = "https://mainnet.infura.io/v3/e3d398889c104ba6b4658061dbfc6c6a"
 provider = HTTPProvider(api_url)
 web3 = Web3(provider)
 
