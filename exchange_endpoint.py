@@ -47,38 +47,23 @@ def check_sig(payload,sig):
     result = False
     
     if platform == "Algorand":
-        print("Algorand")
         if algosdk.util.verify_bytes(payload_json.encode('utf-8'), sig, pk):
-            print("Algo sig verifies!")
+            print("Algorand sig verified!")
             result = True
-
     elif platform == "Ethereum":
-        print("Ethereum")
         eth_encoded_msg = eth_account.messages.encode_defunct(text=payload_json)
         if eth_account.Account.recover_message(eth_encoded_msg, signature=sig) == pk:
-            print("Eth sig verifies!")
+            print("Ethereum sig verified!")
             result = True
     
     return result, payload_json
 
 
 
-
-
-
-
-
-
-# def fill_order(order,txes=[]):
-#     pass
-
-
 # the inner recursive function
 def fill_order():
     # get the order you just inserted from the DB
     current_order = g.session.query(Order).order_by(Order.id.desc()).first()
-    # print("_order_id")
-    # print(current_order.id)
 
     # Check if there are any existing orders that match and add them into a list
     order_list = []
@@ -94,8 +79,6 @@ def fill_order():
 
     # If a match is found between order and existing_order
     if (len(order_list) > 0):
-        # print(" order_list_length")
-        # print(len(order_list))
         # pick the first one in the list
         match_order = order_list[0]
 
@@ -107,8 +90,7 @@ def fill_order():
         current_order.counterparty_id = match_order.id
         g.session.commit()
 
-        # if both orders can completely fill each other
-        # no child order needs to be generated
+        # if both orders can completely fill each other no child order needs to be generated
 
         # If match_order is not completely filled
         if (current_order.sell_amount < match_order.buy_amount):
@@ -116,9 +98,6 @@ def fill_order():
             diff = match_order.buy_amount - current_order.sell_amount
             exchange_rate_match = match_order.sell_amount / match_order.buy_amount
             sell_amount_new_match = diff * exchange_rate_match
-            # print(match_order.id)
-            # print(diff)
-            # print(sell_amount_new_match)
             new_order = Order(sender_pk=match_order.sender_pk,
                               receiver_pk=match_order.receiver_pk,
                               buy_currency=match_order.buy_currency,
@@ -128,18 +107,15 @@ def fill_order():
                               creator_id=match_order.id)
             g.session.add(new_order)
             g.session.commit()
-            print("M")
+            # print("M")
             fill_order()
 
         # If current_order is not completely filled
         if (current_order.buy_amount > match_order.sell_amount):
-            # print("_current_order is not completely filled")
             diff = current_order.buy_amount - match_order.sell_amount
             exchange_rate_current = current_order.buy_amount / current_order.sell_amount
             sell_amount_new_current = diff / exchange_rate_current
-            # print(current_order.id)
-            # print(diff)
-            # print(sell_amount_new_current)
+
             new_order = Order(sender_pk=current_order.sender_pk,
                               receiver_pk=current_order.receiver_pk,
                               buy_currency=current_order.buy_currency,
@@ -149,18 +125,11 @@ def fill_order():
                               creator_id=current_order.id)
             g.session.add(new_order)
             g.session.commit()
-            print("C")
+            #print("C")
             fill_order()
 
 
-
-
-
-
-
-
-# Takes input dictionary d and writes it to the Log table
-# Hint: use json.dumps or str() to get it in a nice string form
+# Takes input dictionary d and writes it to the Log table Hint: use json.dumps or str() to get it in a nice string form
 def log_message(d):
     create_session()
     order_obj = Log(message=d)
@@ -169,20 +138,12 @@ def log_message(d):
 
 
 # convert a row in DB into a dict
-def row2dict(row):
+def rowToDictionary(row):
     return {
         c.name: getattr(row, c.name)
         for c in row.__table__.columns
     }
 
-# print a dictionary nicely
-def print_dict(d):
-    for key, value in d.items():
-        print(key, ' : ', value)
-
-        
-        
-        
 
         
 """ End of helper methods """
@@ -217,8 +178,7 @@ def trade():
         #Your code here
         #Note that you can access the database session using g.session
 
-        # TODO 1: Check the signature
-        
+        #1: Check the signature
         # extract contents from json
         sig = content['sig']
         payload = content['payload']
@@ -235,18 +195,8 @@ def trade():
         result = check_result[0]
         payload_json = check_result[1]
         
-        # TODO 2: Add the order to the database
-        # TODO 4: Be sure to return jsonify(True) or jsonify(False) depending on if the method was successful
-        
-        # If the signature does not verify, do not insert the order into the “Order” table.
-        # Instead, insert a record into the “Log” table, with the message field set to be json.dumps(payload).
-        if result is False:
-            print("signature does NOT verify")
-            log_message(payload_json)            
-            return jsonify(result)
-        
-        # If the signature verifies, store the signature,
-        # as well as all of the fields under the ‘payload’ in the “Order” table EXCEPT for 'platform’.
+        # 2: Add the order to the database
+        # If the signature verifies, store the signature, as well as all of the fields under the ‘payload’ in the “Order” table EXCEPT for 'platform’.
         if result is True:
             print("signature verifies")
             create_session()
@@ -259,13 +209,18 @@ def trade():
                               signature=sig)            
             g.session.add(order_obj)
             
-            # TODO 3: Fill the order
+            #3: Fill the order
             fill_order()
             shutdown_session()
             return jsonify(result)
         
-        
-        
+        # 4: Be sure to return jsonify(True) or jsonify(False) depending on if the method was successful
+        # If the signature does not verify, do not insert the order into the “Order” table.
+        # Instead, insert a record into the “Log” table, with the message field set to be json.dumps(payload).
+        if result is False:
+            print("signature does NOT verify")
+            log_message(payload_json)            
+            return jsonify(result)         
         
 
 @app.route('/order_book')
@@ -279,22 +234,17 @@ def order_book():
     # ("sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", “signature”).
     print("--------- order_book ---------")
     create_session()
-        
+    
     # get orders from DB into a list
     order_dict_list = [
-           row2dict(order)
+           rowToDictionary(order)
            for order in g.session.query(Order).all()
     ]
         
-    # add the list into a dict
+    # add the list items into a dictionary
     result = {
         'data': order_dict_list
     }    
-    
-    print("order book length: ")
-    print(len(order_dict_list))
-    # print_dict(order_dict_list[-2])
-    # print_dict(order_dict_list[-1])
 
     shutdown_session()
     return jsonify(result)
