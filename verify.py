@@ -5,18 +5,20 @@ import random
 def signChallenge( challenge ):
 
     w3 = Web3()
-    acc = w3.eth.account.create()
-    print(f'private key={w3.toHex(acc.privateKey)}, account={acc.address}')
-
+    #acc = w3.eth.account.create()
+    #print(f'private key={w3.toHex(acc.privateKey)}, account={acc.address}')
+    #private key=0x67b5360a59a1984ab9b803802b4a54dbd11cd8bcdb6471924a29df071a17e905, account=0xA96cC25F68D6b852a813169b8224a04be9F06E80
+    #Transaction: https://testnet.snowtrace.io/tx/0xae0c0e35a8d562de324a9168d69af5fbd9b890c6c8275bd0d55f9bab9f772c77
+    
     #This is the only line you need to modify
-    #sk = "e3d398889c104ba6b4658061dbfc6c6a"
+    sk = "0x67b5360a59a1984ab9b803802b4a54dbd11cd8bcdb6471924a29df071a17e905"
 
-    #acct = w3.eth.account.from_key(sk)
+    acct = w3.eth.account.from_key(sk)
 
 
-    #signed_message = w3.eth.account.sign_message( challenge, private_key = acct._private_key )
+    signed_message = w3.eth.account.sign_message( challenge, private_key = acct._private_key )
 
-    #return acct.address, signed_message.signature
+    return acct.address, signed_message.signature
 
 
 def verifySig():
