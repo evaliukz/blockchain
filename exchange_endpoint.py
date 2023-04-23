@@ -113,17 +113,11 @@ def log_message(message_dict):
     
     
     
-    
-    
-    
-    
-    
-    
 def get_algo_keys():
     
     # TODO: Generate or read (using the mnemonic secret) 
     # the algorand public/private keys
-    mnemonic_secret = "such chapter crane ugly uncover fun kitten duty culture giant skirt reunion pizza pill web monster upon dolphin aunt close marble dune kangaroo ability merit"
+    mnemonic_secret = "flip funny month typical tilt electric luxury topic upper laugh wrist puppy service idea private shift reject neither minor unfair empower spawn small abstract audit"
     algo_sk = mnemonic.to_private_key(mnemonic_secret)
     algo_pk = mnemonic.to_public_key(mnemonic_secret)
     
@@ -186,8 +180,7 @@ def fill_order(order, txes=[]):
         current_order.counterparty_id = match_order.id
         g.session.commit()
         
-        
-            
+    
 
         # If match_order is not completely filled
         if (current_order.sell_amount < match_order.buy_amount):
