@@ -133,7 +133,7 @@ def get_eth_keys(filename = "eth_mnemonic.txt"):
     # the ethereum public/private keys
     w3.eth.account.enable_unaudited_hdwallet_features()
 
-    mnemonic_secret = "program gym dash habit possible gate shallow exclude access report cave will"
+    mnemonic_secret = "romance stairs glimpse prison noise strategy enlist fantasy just actress cruel shoot"
     acct = w3.eth.account.from_mnemonic(mnemonic_secret)
     eth_pk = acct._address
     eth_sk = acct._private_key
