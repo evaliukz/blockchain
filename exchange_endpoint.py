@@ -285,11 +285,23 @@ def check_sig(payload, sig):
     if payload.get('platform') == 'Ethereum':
         encoded_msg = eth_account.messages.encode_defunct(text=json.dumps(payload))
         return eth_account.Account.recover_message(encoded_msg, signature=sig) == sender_pk
-    else:
+    if payload.get('platform') == 'Algorand':
         return algosdk.util.verify_bytes(json.dumps(payload).encode('utf-8'), sig, sender_pk)
 
 
+def orderToDict(order_obj):
+    d = {}
+    d['sender_pk'] = order_obj.sender_pk
+    d['receiver_pk'] = order_obj.receiver_pk
+    d['buy_currency'] = order_obj.buy_currency
+    d['sell_currency'] = order_obj.sell_currency
+    d['buy_amount'] = order_obj.buy_amount
+    d['sell_amount'] = order_obj.sell_amount
+    d['tx_id'] = order_obj.tx_id
+    d['signature'] = order_obj.signature
+    return d
 """ End of Helper methods"""
+
 
 
 @app.route('/address', methods=['POST'])
@@ -306,13 +318,13 @@ def address():
         if content['platform'] == "Ethereum":
             # Your code here
             eth_sk, eth_pk = get_eth_keys()
-
             return jsonify(eth_pk)
+        
         if content['platform'] == "Algorand":
             # Your code here
             algo_sk, algo_pk = get_algo_keys()
-
             return jsonify(algo_pk)
+
 
 
 @app.route('/trade', methods=['POST'])
@@ -371,10 +383,10 @@ def trade():
                 if tx['from'] != payload['sender_pk'] or tx['to'] != eth_pk or tx['value'] != payload['sell_amount']:
                     return jsonify(False)
                 fill_order(order_obj)
-
-
             else:
                 log_message(json.dumps(content['payload']))
+
+
         if content['payload']['platform'] == 'Algorand':
             result = check_sig(content['payload'], content['sig'])
             if result:
@@ -417,21 +429,8 @@ def order_book():
     order_dict = {'data': []}
     orders = g.session.query(Order)
     for order in orders:
-        order_dict['data'].append(order_obj_to_dict(order))
+        order_dict['data'].append(orderToDict(order))
     return json.dumps(order_dict)
-
-
-def order_obj_to_dict(order_obj):
-    d = {}
-    d['sender_pk'] = order_obj.sender_pk
-    d['receiver_pk'] = order_obj.receiver_pk
-    d['buy_currency'] = order_obj.buy_currency
-    d['sell_currency'] = order_obj.sell_currency
-    d['buy_amount'] = order_obj.buy_amount
-    d['sell_amount'] = order_obj.sell_amount
-    d['tx_id'] = order_obj.tx_id
-    d['signature'] = order_obj.signature
-    return d
 
 
 if __name__ == '__main__':
