@@ -19,7 +19,7 @@ import web3
 from web3 import Web3, HTTPProvider
 
 # TODO: make sure you implement connect_to_algo, send_tokens_algo, and send_tokens_eth
-from send_tokens import connect_to_algo, connect_to_eth, send_tokens_algo, send_tokens_eth
+from send_tokens import connect_to_algo, connect_to_eth, send_tokens_algo, send_tokens_eth, wait_for_confirmation_eth, wait_for_confirmation_algo, eth_print
 
 from models import Base, Order, TX, Log
 engine = create_engine('sqlite:///orders.db')
@@ -113,6 +113,12 @@ def log_message(message_dict):
     
     
     
+    
+    
+    
+    
+    
+    
 def get_algo_keys():
     
     # TODO: Generate or read (using the mnemonic secret) 
@@ -132,7 +138,7 @@ def get_eth_keys(filename = "eth_mnemonic.txt"):
     # TODO: Generate or read (using the mnemonic secret) 
     # the ethereum public/private keys
     w3.eth.account.enable_unaudited_hdwallet_features()
-
+    
     mnemonic_secret = "romance stairs glimpse prison noise strategy enlist fantasy just actress cruel shoot"
     acct = w3.eth.account.from_mnemonic(mnemonic_secret)
     eth_pk = acct._address
@@ -180,7 +186,8 @@ def fill_order(order, txes=[]):
         current_order.counterparty_id = match_order.id
         g.session.commit()
         
-    
+        
+            
 
         # If match_order is not completely filled
         if (current_order.sell_amount < match_order.buy_amount):
@@ -328,6 +335,12 @@ def execute_txes(txes):
         g.session.commit()
         
     
+
+
+
+
+
+
 
 
 
@@ -521,7 +534,7 @@ def trade():
                               tx_id=payload['tx_id'],
                               signature=sig)            
             g.session.add(order_obj)
-            g.session.commit()
+    
             # 3a. Check if the order is backed by a transaction equal to the sell_amount (this is new)
             # In this assignment, the “/trade” endpoint should take an additional field “tx_id” which specifies the transaction ID 
             # (sometimes called the transaction hash) of the transaction that deposited tokens to the exchange. 
@@ -536,7 +549,7 @@ def trade():
             txes = []
             current_order = g.session.query(Order).order_by(Order.id.desc()).first()
             fill_order(current_order, txes)
-            
+
             # 4. Execute the transactions
             execute_txes(txes)
 
@@ -574,11 +587,14 @@ def order_book():
     for order_dict in order_dict_list:
         print_dict(order_dict)
         print()
-
+    
+    #############
+    
     tx_dict_list = [
            row2dict(tx)
            for tx in g.session.query(TX).all()
     ]
+    
     # add the list into a dict
     tx_result = {
         'data': tx_dict_list
