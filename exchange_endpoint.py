@@ -284,26 +284,29 @@ def execute_txes(txes):
         g.session.commit()
     pass
 
+
+
+
 # check whether “sig” is a valid signature of json.dumps(payload),
 # using the signature algorithm specified by the platform field.
 # Be sure to verify the payload using the sender_pk.
 def check_sig(payload,sig):
     
-    pk = payload['sender_pk']
+    result = False
+    sender_pk = payload['sender_pk']
     platform = payload['platform']
     payload_json = json.dumps(payload)
-    result = False
     
     if platform == "Algorand":
         print("Algorand")
-        if algosdk.util.verify_bytes(payload_json.encode('utf-8'), sig, pk):
+        if algosdk.util.verify_bytes(payload_json.encode('utf-8'), sig, sender_pk):
             print("Algo sig verifies!")
             result = True
 
     elif platform == "Ethereum":
         print("Ethereum")
         eth_encoded_msg = eth_account.messages.encode_defunct(text=payload_json)
-        if eth_account.Account.recover_message(eth_encoded_msg, signature=sig) == pk:
+        if eth_account.Account.recover_message(eth_encoded_msg, signature=sig) == sender_pk:
             print("Eth sig verifies!")
             result = True
     
@@ -350,17 +353,28 @@ def address():
             return jsonify( f"Error: invalid platform provided: {content['platform']}"  )
         
         if content['platform'] == "Ethereum":
-            #Your code here
+            eth_keys = get_eth_keys()
+            eth_sk = eth_keys[0]
+            eth_pk = eth_keys[1]
+            print( "return server eth address" )
+            print(eth_sk)
+            print("eth_pk \n" + eth_pk)
             return jsonify( eth_pk )
         if content['platform'] == "Algorand":
-            #Your code here
+            algo_keys = get_algo_keys()
+            algo_sk = algo_keys[0]
+            algo_pk = algo_keys[1]
+            print( "return server algo address" )
+            print(algo_sk)
+            print("algo_pk \n" + algo_pk)
             return jsonify( algo_pk )
 
 @app.route('/trade', methods=['POST'])
 def trade():
     print( "In trade", file=sys.stderr )
     connect_to_blockchains()
-    get_keys()
+    get_eth_keys()
+    get_algo_keys() 
     if request.method == "POST":
         content = request.get_json(silent=True)
         columns = [ "buy_currency", "sell_currency", "buy_amount", "sell_amount", "platform", "tx_id", "receiver_pk"]
