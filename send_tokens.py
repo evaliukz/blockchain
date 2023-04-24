@@ -5,6 +5,13 @@ from algosdk.v2client import indexer
 from algosdk import account
 from algosdk.future import transaction
 
+import time
+
+from web3 import Web3
+from web3.middleware import geth_poa_middleware
+from web3.exceptions import TransactionNotFound
+import json
+import progressbar
 
 def connect_to_algo(connection_type=''):
     # Connect to Algorand node maintained by PureStake
@@ -59,13 +66,6 @@ def send_tokens_algo(acl, sender_sk, txes):
 
 # !/usr/bin/python3
 
-from algosdk.v2client import algod
-from algosdk.v2client import indexer
-from algosdk import account
-from algosdk.future import transaction
-import time
-
-
 def connect_to_algo(connection_type=''):
     # Connect to Algorand node maintained by PureStake
     algod_token = "B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab"
@@ -76,9 +76,7 @@ def connect_to_algo(connection_type=''):
         # TODO: return an instance of the v2client indexer. This is used for checking payments for tx_id's
         algod_address = "https://testnet-algorand.api.purestake.io/idx2"
         myindexer = indexer.IndexerClient("", algod_address, headers)
-
         return myindexer
-
     else:
         # TODO: return an instance of the client for sending transactions
         # Tutorial Link: https://developer.algorand.org/tutorials/creating-python-transaction-purestake-api/
@@ -152,14 +150,6 @@ def wait_for_confirmation_algo(client, txid):
 
 
 ##################################
-
-from web3 import Web3
-from web3.middleware import geth_poa_middleware
-from web3.exceptions import TransactionNotFound
-import json
-import progressbar
-
-
 def connect_to_eth():
     IP_ADDR = '3.23.118.2'  # Private Ethereum
     PORT = '8545'
